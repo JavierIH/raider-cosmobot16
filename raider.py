@@ -53,13 +53,13 @@ class Raider(object):
     def home(self, h=0, a=0):
         self.move(1, 512)
         self.move(2, 512)
-        #self.move(3, 512)
+        # self.move(3, 512)
         self.move(4, 512)
-        #self.move(5, 262)
+        # self.move(5, 262)
         self.move(6, 762)
-        #self.move(7, 462)
+        # self.move(7, 462)
         self.move(8, 562)
-        #self.move(9, 62)
+        # self.move(9, 62)
         self.move(10, 952)
         self.move(13, 512)
         self.move(14, 512)
@@ -76,7 +76,6 @@ class Raider(object):
 
     def stepL(self, steps):
         self.home(-140, 30)
-
 
         a_offset = 30
         h_offset = -140
@@ -242,7 +241,7 @@ class Raider(object):
         self.move(21, 512+h_R-35)
         self.move(22, 512-h_L+35)
         self.move(23, 512+100)
-        self.move(24, 512-25)#-a_R)
+        self.move(24, 512-25)  # -a_R)
 
         self.move(4, 512)
         self.move(6, 762)
@@ -292,7 +291,7 @@ class Raider(object):
         self.move(21, 512+h_R-35)
         self.move(22, 512-h_L+35)
         self.move(23, 512+25)
-        self.move(24, 512-100)#-a_R)
+        self.move(24, 512-100)  # -a_R)
 
         self.move(3, 512)
         self.move(5, 362)
@@ -437,7 +436,7 @@ class Raider(object):
 
     def rightLegIK(self, x, y, z):
 
-        target_frame = kdl.Frame(kdl.Vector(x, y, z))
+        target_frame = kdl.Frame(kdl.Vector(-x, y, z))
 
         self.current_angles[0] = np.deg2rad(0.0)
         self.current_angles[1] = np.deg2rad(15.0)
@@ -451,8 +450,6 @@ class Raider(object):
         result_units.append(1023-result_units[0])
 
         return result_units
-
-
 
 
 if __name__ == "__main__":
