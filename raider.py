@@ -415,14 +415,34 @@ class Raider(object):
         self.move(6, 512)
         self.move(2, 512)
 
-    def angleToUnits(self, angle):
+    def degToUnits(self, angle):
         return (int)((angle * 1024.0 / 300) + 512)
 
-    def unitsToAngle(self, units):
+    def radToUnits(self, angle):
+        return (int)((angle * 1024.0 / np.deg2rad(300)) + 512)
+
+    def unitsToDeg(self, units):
         return (units - 512) * 300.0 / 1024
 
     def leftLegIK(self, x, y, z):
         # self.left_leg_YPP = [542, 412, 612]
+
+        target_frame = kdl.Frame(kdl.Vector(x, y, z))
+
+        self.current_angles[0] = np.deg2rad(0.0)
+        self.current_angles[1] = np.deg2rad(-15.0)
+        self.current_angles[2] = np.deg2rad(30.0)
+
+        self.ik_solver.CartToJnt(self.current_angles, target_frame, self.result_angles)
+        self.result_angles[2] = self.result_angles[1] + self.result_angles[2]
+
+        result_units = map(self.radToUnits, self.result_angles)
+        result_units.append(1023-result_units[2])
+        result_units.append(1023-result_units[0])
+
+        return result_units
+
+    def rightLegIK(self, x, y, z):
 
         target_frame = kdl.Frame(kdl.Vector(x, y, z))
 
@@ -433,12 +453,12 @@ class Raider(object):
         self.ik_solver.CartToJnt(self.current_angles, target_frame, self.result_angles)
         self.result_angles[2] = self.result_angles[1] + self.result_angles[2]
 
-        self.result_angles = map(np.rad2deg, self.result_angles)
+        result_units = map(self.radToUnits, self.result_angles)
+        result_units.append(1023-result_units[2])
+        result_units.append(1023-result_units[0])
 
-        return self.result_angles
+        return result_units
 
-    def rightLegIK(x, y):
-        return 1
 
 
 
@@ -452,4 +472,9 @@ if __name__ == "__main__":
     z = -75
     result = robot.leftLegIK(x, y, z)
     print result
-    print map(robot.angleToUnits, result)
+
+    x = 0
+    y = -10
+    z = -75
+    result = robot.rightLegIK(x, y, z)
+    print result
