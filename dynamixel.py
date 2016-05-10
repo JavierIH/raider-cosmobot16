@@ -4,20 +4,24 @@ import serial
 class Dynamixel(object):
 
     def __init__(self, port='/dev/ttyO2', baud_rate=460800):
-        self.com = serial.Serial(port, baud_rate)
+        # self.com = serial.Serial(port, baud_rate)
+        pass
 
     def setPosition(self, id, position):
-        self.com.write(self._coder(1, id, 30, position))
+        # self.com.write(self._coder(1, id, 30, position))
+        pass
 
     def setSpeed(self, id, speed):
-        self.com.write(self._coder(1, id, 32, speed))
+        # self.com.write(self._coder(1, id, 32, speed))
+        pass
 
     def getPosition(self, id):
-        self.com.write(self._coder(0, id, 36, 0))
-        low = self.com.read()
-        self.com.write(self._coder(0, id, 37, 0))
-        high = self.com.read()
-        return (ord(high) << 8) + ord(low)
+        # self.com.write(self._coder(0, id, 36, 0))
+        # low = self.com.read()
+        # self.com.write(self._coder(0, id, 37, 0))
+        # high = self.com.read()
+        # return (ord(high) << 8) + ord(low)
+        return 512
 
     def _coder(self, rw, id, reg, val):
         command = 'M'

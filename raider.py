@@ -1,16 +1,18 @@
 import os
 import sys
-sys.path.append(os.path.abspath(__file__).replace('raider-gre16/raider.py', '') + 'pybotics/')
+sys.path.append(os.path.abspath(__file__).replace('raider-cosmobot16/raider.py', '') + 'pybotics/')
 
 import time
 import numpy as np
 import math
 import control.octosnake.octosnake as octosnake
 import dynamixel
+import PyKDL as kdl
+
 
 class Raider(object):
 
-    def __init__(self, trim, name='raider'):
+    def __init__(self, trim=np.full(25, 0), name='raider'):
 
         # Configuration
         self._name = name
@@ -18,9 +20,28 @@ class Raider(object):
         self.dxl = dynamixel.Dynamixel()
         self.joint_position = np.full(25, 512)
 
+        # Oscillators
         self.osc = []
         for i in range(25):
             self.osc.append(octosnake.Oscillator())
+
+        # Inverse kinematics
+        self.leg = kdl.Chain()
+        self.leg.addSegment(kdl.Segment(kdl.Joint(kdl.Joint.RotX), kdl.Frame(kdl.Vector(0, 0, 0))))
+        self.leg.addSegment(kdl.Segment(kdl.Joint(kdl.Joint.RotY), kdl.Frame(kdl.Vector(0, 0, -75))))
+        self.leg.addSegment(kdl.Segment(kdl.Joint(kdl.Joint.RotY), kdl.Frame(kdl.Vector(0, 0, -75))))
+
+        self.ik_solver = kdl.ChainIkSolverPos_LMA(self.leg)
+
+        self.current_angles = kdl.JntArray(self.leg.getNrOfJoints())
+        self.result_angles = kdl.JntArray(self.leg.getNrOfJoints())
+
+        self.right_leg_YPP = [482, 612, 412]
+        self.left_leg_YPP = [542, 412, 612]
+
+        # self.alpha1=45
+        # self.alpha2=-45
+        # self.beta=self.alpha2-self.alpha1
 
     def move(self, id, position):
         self.dxl.com.write(self.dxl._coder(1, id, 30, int(position+self._trim[id])))
@@ -30,10 +51,10 @@ class Raider(object):
 
     def zero(self):
 
-        for i in range(0,11):
+        for i in range(0, 11):
             self.move(i, 512)
 
-        for i in range(13,25):
+        for i in range(13, 25):
             self.move(i, 512)
 
     def home(self, h=0, a=0):
@@ -59,7 +80,6 @@ class Raider(object):
         self.move(22, 512-h+18)
         self.move(23, 512+a)
         self.move(24, 512-a)
-
 
     def stepL(self, steps):
         self.home(-140, 30)
@@ -100,7 +120,6 @@ class Raider(object):
 
     def stepR(self, steps):
         self.home(-140, 30)
-
 
         a_offset = 30
         h_offset = -140
@@ -212,7 +231,6 @@ class Raider(object):
             self.move(22, 512-h_offset+18-self.osc[4].output)
             time.sleep(0.01)
 
-
     def punchL(self):
         self.home(-140, 30)
         time.sleep(0.1)
@@ -262,8 +280,6 @@ class Raider(object):
         self.move(24, 512-a_R)
 
         time.sleep(0.5)
-
-
 
     def punchR(self):
         self.home(-140, 30)
@@ -315,7 +331,6 @@ class Raider(object):
 
         time.sleep(0.5)
 
-
     def getUp(self):
         self.home(-200, 0)
         time.sleep(0.5)
@@ -357,7 +372,6 @@ class Raider(object):
         time.sleep(2)
         self.home(-140, 30)
 
-
     def backGetUp(self):
         self.home(-200, 0)
         time.sleep(0.5)
@@ -392,7 +406,6 @@ class Raider(object):
         self.move(10, 412)
         time.sleep(0.5)
 
-
         self.move(2, 732)
         self.move(5, 312)
         self.move(6, 812)
@@ -402,9 +415,30 @@ class Raider(object):
         self.move(6, 512)
         self.move(2, 512)
 
+    def angleToUnits(self, angle):
+        return (int)((angle * 1024.0 / 300) + 512)
 
+    def unitsToAngle(self, units):
+        return (units - 512) * 300.0 / 1024
 
+    def leftLegIK(self, x, y, z):
+        # self.left_leg_YPP = [542, 412, 612]
 
+        target_frame = kdl.Frame(kdl.Vector(x, y, z))
+
+        self.current_angles[0] = np.rad2deg(0.0)
+        self.current_angles[1] = np.rad2deg(15.0)
+        self.current_angles[2] = np.rad2deg(-30.0)
+
+        self.ik_solver.CartToJnt(self.current_angles, target_frame, self.result_angles)
+        self.result_angles[2] = self.result_angles[1] + self.result_angles[2]
+
+        # map(np.rad2deg, self.result_angles)
+
+        return self.result_angles
+
+    def rightLegIK(x, y):
+        return 1
 
 
 
@@ -412,7 +446,9 @@ if __name__ == "__main__":
 
     trims=[0,0,0,0,0,0,0,0,0,0,0,0,0,3,-2,-5,5,0,0,-5,0,-6,0,0,0]
     robot = Raider(trims)
-    #robot.zero()
 
-    robot.backGetUp()
-    time.sleep(0.01)
+    x = 0
+    y = 0
+    z = -150
+    print robot.leftLegIK(x, y, z)
+    print map(robot.angleToUnits, robot.leftLegIK(x, y, z))
