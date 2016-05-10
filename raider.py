@@ -36,13 +36,6 @@ class Raider(object):
         self.current_angles = kdl.JntArray(self.leg.getNrOfJoints())
         self.result_angles = kdl.JntArray(self.leg.getNrOfJoints())
 
-        self.right_leg_YPP = [482, 612, 412]
-        self.left_leg_YPP = [542, 412, 612]
-
-        # self.alpha1=45
-        # self.alpha2=-45
-        # self.beta=self.alpha2-self.alpha1
-
     def move(self, id, position):
         self.dxl.com.write(self.dxl._coder(1, id, 30, int(position+self._trim[id])))
         if id == 17 or id == 18:
@@ -60,13 +53,13 @@ class Raider(object):
     def home(self, h=0, a=0):
         self.move(1, 512)
         self.move(2, 512)
-        self.move(3, 512)
+        #self.move(3, 512)
         self.move(4, 512)
-        self.move(5, 262)
+        #self.move(5, 262)
         self.move(6, 762)
-        self.move(7, 462)
+        #self.move(7, 462)
         self.move(8, 562)
-        self.move(9, 62)
+        #self.move(9, 62)
         self.move(10, 952)
         self.move(13, 512)
         self.move(14, 512)
@@ -437,7 +430,7 @@ class Raider(object):
         self.result_angles[2] = self.result_angles[1] + self.result_angles[2]
 
         result_units = map(self.radToUnits, self.result_angles)
-        result_units.append(1023-result_units[2])
+        result_units.append(result_units[2])
         result_units.append(1023-result_units[0])
 
         return result_units
@@ -454,7 +447,7 @@ class Raider(object):
         self.result_angles[2] = self.result_angles[1] + self.result_angles[2]
 
         result_units = map(self.radToUnits, self.result_angles)
-        result_units.append(1023-result_units[2])
+        result_units.append(result_units[2])
         result_units.append(1023-result_units[0])
 
         return result_units
@@ -467,14 +460,26 @@ if __name__ == "__main__":
     trims=[0,0,0,0,0,0,0,0,0,0,0,0,0,3,-2,-5,5,0,0,-5,0,-6,0,0,0]
     robot = Raider(trims)
 
-    x = 0
-    y = 10
-    z = -75
-    result = robot.leftLegIK(x, y, z)
-    print result
+    robot.home(-140, 30)
 
-    x = 0
-    y = -10
-    z = -75
-    result = robot.rightLegIK(x, y, z)
-    print result
+    x = -20
+    y = 20
+    z = -120
+    result_left = robot.leftLegIK(x, y, z)
+
+    x = 20
+    y = -20
+    z = -120
+    result_right = robot.rightLegIK(x, y, z)
+
+    robot.move(15, result_right[0])
+    robot.move(16, result_left[0])
+    robot.move(17, result_right[1])
+    robot.move(18, result_left[1])
+    robot.move(19, result_right[2])
+    robot.move(20, result_left[2])
+    robot.move(21, result_right[3])
+    robot.move(22, result_left[3])
+    robot.move(23, result_right[4])
+    robot.move(24, result_left[4])
+    print result_right
