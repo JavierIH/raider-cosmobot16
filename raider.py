@@ -458,11 +458,13 @@ if __name__ == "__main__":
     robot = Raider(trims)
     robot.home(-140, 30)
 
-    steps = 10
-    period = 800
-    amplitude = [8, 8, 12, 12]
-    offset = [15, -15, -120, -120]
-    phase = [0, 0, 0, 180]
+    time.sleep(5)
+
+    steps = 60
+    period = 400
+    amplitude = [10, 10, 8, 8, 8, 8]
+    offset = [8, -8, -135, -135, -26, -26]
+    phase = [30, 30, 0, 180, 270, 90]
     n_osc = len(amplitude)
 
     for i in range(n_osc):
@@ -476,17 +478,20 @@ if __name__ == "__main__":
     robot.osc[0].ref_time = init_ref
     robot.osc[1].ref_time = init_ref
     robot.osc[2].ref_time = init_ref
+    robot.osc[3].ref_time = init_ref
+    robot.osc[4].ref_time = init_ref
+    robot.osc[5].ref_time = init_ref
 
     while time.time() < final:
         for i in range(n_osc):
             robot.osc[i].refresh()
-
-        x = -20
+ 
+        x = robot.osc[4].output
         y = robot.osc[0].output
         z = robot.osc[2].output
         result_left = robot.leftLegIK(x, y, z)
 
-        x = -20
+        x = robot.osc[5].output
         y = robot.osc[1].output
         z = robot.osc[3].output
         result_right = robot.rightLegIK(x, y, z)
@@ -501,6 +506,11 @@ if __name__ == "__main__":
         robot.move(22, result_left[3])
         robot.move(23, result_right[4])
         robot.move(24, result_left[4])
+	time.sleep(0.01)
         print result_right
 
     robot.home(-140, 30)
+    robot.home(-140, 30)
+    time.sleep(0.5)
+    robot.home(-140, 30)
+
