@@ -426,14 +426,14 @@ class Raider(object):
 
         target_frame = kdl.Frame(kdl.Vector(x, y, z))
 
-        self.current_angles[0] = np.rad2deg(0.0)
-        self.current_angles[1] = np.rad2deg(15.0)
-        self.current_angles[2] = np.rad2deg(-30.0)
+        self.current_angles[0] = np.deg2rad(0.0)
+        self.current_angles[1] = np.deg2rad(15.0)
+        self.current_angles[2] = np.deg2rad(-30.0)
 
         self.ik_solver.CartToJnt(self.current_angles, target_frame, self.result_angles)
         self.result_angles[2] = self.result_angles[1] + self.result_angles[2]
 
-        # map(np.rad2deg, self.result_angles)
+        self.result_angles = map(np.rad2deg, self.result_angles)
 
         return self.result_angles
 
@@ -448,7 +448,8 @@ if __name__ == "__main__":
     robot = Raider(trims)
 
     x = 0
-    y = 0
-    z = -150
-    print robot.leftLegIK(x, y, z)
-    print map(robot.angleToUnits, robot.leftLegIK(x, y, z))
+    y = 10
+    z = -75
+    result = robot.leftLegIK(x, y, z)
+    print result
+    print map(robot.angleToUnits, result)
