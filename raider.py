@@ -456,27 +456,50 @@ if __name__ == "__main__":
 
     trims=[0,0,0,0,0,0,0,0,0,0,0,0,0,3,-2,-5,5,0,0,-5,0,-6,0,0,0]
     robot = Raider(trims)
-
     robot.home(-140, 30)
 
-    x = -20
-    y = 20
-    z = -120
-    result_left = robot.leftLegIK(x, y, z)
+    steps = 4
+    period = 1000
+    amplitude = [20, 20, 0]
+    offset = [20, -20, 0]
+    phase = [0, 0, 0]
 
-    x = 20
-    y = -20
-    z = -120
-    result_right = robot.rightLegIK(x, y, z)
+    for i in range(3):
+        robot.osc[i].period = period
+        robot.osc[i].amplitude = amplitude[i]
+        robot.osc[i].phase = phase[i]
+        robot.osc[i].offset = offset[i]
 
-    robot.move(15, result_right[0])
-    robot.move(16, result_left[0])
-    robot.move(17, result_right[1])
-    robot.move(18, result_left[1])
-    robot.move(19, result_right[2])
-    robot.move(20, result_left[2])
-    robot.move(21, result_right[3])
-    robot.move(22, result_left[3])
-    robot.move(23, result_right[4])
-    robot.move(24, result_left[4])
-    print result_right
+    init_ref = time.time()
+    final = init_ref + float(period*steps)/1000
+    robot.osc[0].ref_time = init_ref
+    robot.osc[1].ref_time = init_ref
+    robot.osc[2].ref_time = init_ref
+
+    while time.time() < final:
+        for i in range(3):
+            robot.osc[i].refresh()
+
+        x = -20
+        y = robot.osc[0].output
+        z = -120
+        result_left = robot.leftLegIK(x, y, z)
+
+        x = -20
+        y = robot.osc[1].output
+        z = -120
+        result_right = robot.rightLegIK(x, y, z)
+
+        robot.move(15, result_right[0])
+        robot.move(16, result_left[0])
+        robot.move(17, result_right[1])
+        robot.move(18, result_left[1])
+        robot.move(19, result_right[2])
+        robot.move(20, result_left[2])
+        robot.move(21, result_right[3])
+        robot.move(22, result_left[3])
+        robot.move(23, result_right[4])
+        robot.move(24, result_left[4])
+        print result_right
+
+    robot.home(-140, 30)
