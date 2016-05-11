@@ -456,13 +456,13 @@ if __name__ == "__main__":
 
     trims=[0,0,0,0,0,0,0,0,0,0,0,0,0,3,-2,-5,5,0,0,-5,0,-6,0,0,0]
     robot = Raider(trims)
-    robot.home(-140, 30)
+    robot.home(-100, 30)
 
     time.sleep(5)
 
     steps = 60
-    period = 600
-    amplitude = [10, 10, 8, 8, 8, 8, 10, 10, 16]
+    period = 550
+    amplitude = [10, 10, 8, 8, 10, 10, 12, 12, 16]
     offset = [8, -8, -135, -135, -26, -26, 512, 512, 512]
     phase = [30, 30, 0, 180, 270, 90, 90, 90, 270]
     n_osc = len(amplitude)
