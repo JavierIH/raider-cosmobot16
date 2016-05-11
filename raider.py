@@ -456,7 +456,7 @@ if __name__ == "__main__":
 
     trims=[0,0,0,0,0,0,0,0,0,0,0,0,0,3,-2,-5,5,0,0,-5,0,-6,0,0,0]
     robot = Raider(trims)
-    robot.home(-100, 30)
+    robot.home(-80, 30)
 
     time.sleep(5)
 
