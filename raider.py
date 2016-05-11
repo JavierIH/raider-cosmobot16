@@ -461,10 +461,10 @@ if __name__ == "__main__":
     time.sleep(5)
 
     steps = 60
-    period = 400
-    amplitude = [10, 10, 8, 8, 8, 8]
-    offset = [8, -8, -135, -135, -26, -26]
-    phase = [30, 30, 0, 180, 270, 90]
+    period = 600
+    amplitude = [10, 10, 8, 8, 8, 8, 10, 10, 16]
+    offset = [8, -8, -135, -135, -26, -26, 512, 512, 512]
+    phase = [30, 30, 0, 180, 270, 90, 90, 90, 270]
     n_osc = len(amplitude)
 
     for i in range(n_osc):
@@ -481,6 +481,9 @@ if __name__ == "__main__":
     robot.osc[3].ref_time = init_ref
     robot.osc[4].ref_time = init_ref
     robot.osc[5].ref_time = init_ref
+    robot.osc[6].ref_time = init_ref
+    robot.osc[7].ref_time = init_ref
+    robot.osc[8].ref_time = init_ref
 
     while time.time() < final:
         for i in range(n_osc):
@@ -495,8 +498,11 @@ if __name__ == "__main__":
         y = robot.osc[1].output
         z = robot.osc[3].output
         result_right = robot.rightLegIK(x, y, z)
-
-        robot.move(15, result_right[0])
+        
+	robot.move(2, robot.osc[8].output)
+	robot.move(13, robot.osc[6].output)
+	robot.move(14, robot.osc[7].output)
+	robot.move(15, result_right[0])
         robot.move(16, result_left[0])
         robot.move(17, result_right[1])
         robot.move(18, result_left[1])
