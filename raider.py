@@ -74,6 +74,54 @@ class Raider(object):
         self.move(23, 512+a)
         self.move(24, 512-a)
 
+    def walk(self, steps):
+        period = 550
+        amplitude = [10, 10, 8, 8, 10, 10, 12, 12, 16]
+        offset = [8, -8, -135, -135, -26, -26, 512, 512, 512]
+        phase = [30, 30, 0, 180, 260, 80, 90, 90, 270]
+        n_osc = len(amplitude)
+
+        for i in range(n_osc):
+            self.osc[i].period = period
+            self.osc[i].amplitude = amplitude[i]
+            self.osc[i].phase = phase[i]
+            self.osc[i].offset = offset[i]
+
+        init_ref = time.time()
+        final = init_ref + float(period*steps)/1000
+
+        for i in range(n_osc):
+            self.osc[i].ref_time = init_ref
+
+        while time.time() < final:
+            for i in range(n_osc):
+                self.osc[i].refresh()
+
+            x = self.osc[4].output
+            y = self.osc[0].output
+            z = self.osc[2].output
+            result_left = self.leftLegIK(x, y, z)
+
+            x = self.osc[5].output
+            y = self.osc[1].output
+            z = self.osc[3].output
+            result_right = robot.rightLegIK(x, y, z)
+
+            self.move(2, self.osc[8].output)
+            self.move(13, self.osc[6].output)
+            self.move(14, self.osc[7].output)
+            self.move(15, result_right[0])
+            self.move(16, result_left[0])
+            self.move(17, result_right[1])
+            self.move(18, result_left[1])
+            self.move(19, result_right[2])
+            self.move(20, result_left[2])
+            self.move(21, result_right[3])
+            self.move(22, result_left[3])
+            self.move(23, result_right[4])
+            self.move(24, result_left[4])
+            time.sleep(0.01)
+
     def stepL(self, steps):
         self.home(-140, 30)
 
@@ -460,63 +508,9 @@ if __name__ == "__main__":
 
     time.sleep(5)
 
-    steps = 60
-    period = 550
-    amplitude = [10, 10, 8, 8, 10, 10, 12, 12, 16]
-    offset = [8, -8, -135, -135, -26, -26, 512, 512, 512]
-    phase = [30, 30, 0, 180, 260, 80, 90, 90, 270]
-    n_osc = len(amplitude)
-
-    for i in range(n_osc):
-        robot.osc[i].period = period
-        robot.osc[i].amplitude = amplitude[i]
-        robot.osc[i].phase = phase[i]
-        robot.osc[i].offset = offset[i]
-
-    init_ref = time.time()
-    final = init_ref + float(period*steps)/1000
-    robot.osc[0].ref_time = init_ref
-    robot.osc[1].ref_time = init_ref
-    robot.osc[2].ref_time = init_ref
-    robot.osc[3].ref_time = init_ref
-    robot.osc[4].ref_time = init_ref
-    robot.osc[5].ref_time = init_ref
-    robot.osc[6].ref_time = init_ref
-    robot.osc[7].ref_time = init_ref
-    robot.osc[8].ref_time = init_ref
-
-    while time.time() < final:
-        for i in range(n_osc):
-            robot.osc[i].refresh()
- 
-        x = robot.osc[4].output
-        y = robot.osc[0].output
-        z = robot.osc[2].output
-        result_left = robot.leftLegIK(x, y, z)
-
-        x = robot.osc[5].output
-        y = robot.osc[1].output
-        z = robot.osc[3].output
-        result_right = robot.rightLegIK(x, y, z)
-        
-	robot.move(2, robot.osc[8].output)
-	robot.move(13, robot.osc[6].output)
-	robot.move(14, robot.osc[7].output)
-	robot.move(15, result_right[0])
-        robot.move(16, result_left[0])
-        robot.move(17, result_right[1])
-        robot.move(18, result_left[1])
-        robot.move(19, result_right[2])
-        robot.move(20, result_left[2])
-        robot.move(21, result_right[3])
-        robot.move(22, result_left[3])
-        robot.move(23, result_right[4])
-        robot.move(24, result_left[4])
-	time.sleep(0.01)
-        print result_right
+    robot.walk(5)
 
     robot.home(-140, 30)
     robot.home(-140, 30)
     time.sleep(0.5)
     robot.home(-140, 30)
-
