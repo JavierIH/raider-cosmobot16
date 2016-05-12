@@ -42,6 +42,12 @@ class Raider(object):
             self.dxl.com.write(self.dxl._coder(1, id+100, 30, int(position)+self._trim[id]))
         self.joint_position[id] = position
 
+    def setSpeed(self, id, speed):
+        self.dxl.com.write(self.dxl._coder(1, id, 32, int(speed)))
+        if id == 17 or id == 18:
+            self.dxl.com.write(self.dxl._coder(1, id+100, 32, int(speed)))
+        self.joint_position[id] = position
+
     def zero(self):
 
         for i in range(0, 11):
@@ -196,7 +202,7 @@ class Raider(object):
             time.sleep(0.01)
 
     def turnR(self, steps):
-        self.home(-140, 10)
+        self.home(-80, 10)
         self.move(16, 512+30)
 
         h_offset = -80
@@ -234,7 +240,7 @@ class Raider(object):
             time.sleep(0.01)
 
     def turnL(self, steps):
-        self.home(-140, 10)
+        self.home(-80, 10)
 
         self.move(15, 512-30)
 
@@ -505,13 +511,6 @@ if __name__ == "__main__":
 
     trims=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-5,5,0,0,-5,0,-6,0,0,0]
     robot = Raider(trims)
-    robot.home(-80, 30)
-
-    time.sleep(5)
-
-    robot.walk(5)
-
-    robot.home(-140, 30)
-    robot.home(-140, 30)
-    time.sleep(0.5)
-    robot.home(-140, 30)
+    robot.home(-160, 30)
+    for i in range(0, 25)
+    robot.setSpeed(i, 300)
