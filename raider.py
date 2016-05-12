@@ -46,7 +46,6 @@ class Raider(object):
         self.dxl.com.write(self.dxl._coder(1, id, 32, int(speed)))
         if id == 17 or id == 18:
             self.dxl.com.write(self.dxl._coder(1, id+100, 32, int(speed)))
-        self.joint_position[id] = position
 
     def zero(self):
 
@@ -462,6 +461,30 @@ class Raider(object):
         self.move(6, 512)
         self.move(2, 512)
 
+    def lift(self):
+
+        x = 0
+        y = 15
+        z = -135
+        result_left = self.leftLegIK(x, y, z)
+
+        x = 0
+        y = -15
+        z = -135
+        result_right = self.rightLegIK(x, y, z)
+
+        self.move(15, result_right[0])
+        self.move(16, result_left[0])
+        self.move(17, result_right[1])
+        self.move(18, result_left[1])
+        self.move(19, result_right[2])
+        self.move(20, result_left[2])
+        self.move(21, result_right[3])
+        self.move(22, result_left[3])
+        self.move(23, result_right[4])
+        self.move(24, result_left[4])
+        time.sleep(0.01)
+
     def degToUnits(self, angle):
         return (int)((angle * 1024.0 / 300) + 512)
 
@@ -511,6 +534,4 @@ if __name__ == "__main__":
 
     trims=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-5,5,0,0,-5,0,-6,0,0,0]
     robot = Raider(trims)
-    robot.home(-160, 30)
-    for i in range(0, 25)
-    robot.setSpeed(i, 300)
+    robot.lift()
