@@ -76,6 +76,7 @@ class Raider(object):
 
     def walk(self, steps):
         period = 550
+	ph_init = 90
         amplitude = [10, 10, 8, 8, 10, 10, 12, 12, 16]
         offset = [8, -8, -135, -135, -26, -26, 512, 512, 512]
         phase = [30, 30, 0, 180, 260, 80, 90, 90, 270]
@@ -84,7 +85,7 @@ class Raider(object):
         for i in range(n_osc):
             self.osc[i].period = period
             self.osc[i].amplitude = amplitude[i]
-            self.osc[i].phase = phase[i]
+            self.osc[i].phase = phase[i] + ph_init
             self.osc[i].offset = offset[i]
 
         init_ref = time.time()
@@ -105,7 +106,7 @@ class Raider(object):
             x = self.osc[5].output
             y = self.osc[1].output
             z = self.osc[3].output
-            result_right = robot.rightLegIK(x, y, z)
+            result_right = self.rightLegIK(x, y, z)
 
             self.move(2, self.osc[8].output)
             self.move(13, self.osc[6].output)

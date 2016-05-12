@@ -8,9 +8,9 @@ pygame.joystick.init()
 joystick = pygame.joystick.Joystick(0)
 joystick.init()
 
-trims=[0,0,0,0,0,0,0,0,0,0,0,0,0,3,-2,-5,5,0,0,-5,0,0,0,0,0]
+trims=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-5,5,0,0,-5,0,0,0,0,0]
 robot = raider.Raider(trims)
-robot.home(-140, 30)
+# robot.home(-140, 30)
 time.sleep(0.01)
 
 while True:
@@ -53,11 +53,9 @@ while True:
         print 'stepR'
         robot.stepR(1)
 
-
     elif pad[0] == 1:
         print 'turnR'
         robot.turnR(1)
-
 
     elif pad[0] == -1:
         print 'turnL'
@@ -65,7 +63,7 @@ while True:
 
     elif pad[1] == 1:
         print 'walk'
-        # robot.walkF()
+        robot.walk(1)
 
     elif pad[1] == -1:
         print 'back'
@@ -80,6 +78,6 @@ while True:
         robot.backGetUp()
 
     else:
-        robot.home(-140, 30)
+        robot.home(-80, 30)
         pass
     clock.tick(5000)
