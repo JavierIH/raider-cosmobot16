@@ -76,7 +76,7 @@ class Raider(object):
 
     def walk(self, steps):
         period = 550
-	ph_init = 90
+        ph_init = 90
         amplitude = [10, 10, 8, 8, 10, 10, 12, 12, 16]
         offset = [8, -8, -135, -135, -26, -26, 512, 512, 512]
         phase = [30, 30, 0, 180, 260, 80, 90, 90, 270]
@@ -124,10 +124,10 @@ class Raider(object):
             time.sleep(0.01)
 
     def stepL(self, steps):
-        self.home(-140, 30)
+        self.home(-80, 30)
 
         a_offset = 30
-        h_offset = -140
+        h_offset = -80
         period = 250
         amplitude = [30, 10, 20]
         offset = [0, 0, 0]
@@ -160,10 +160,10 @@ class Raider(object):
             time.sleep(0.01)
 
     def stepR(self, steps):
-        self.home(-140, 30)
+        self.home(-80, 30)
 
         a_offset = 30
-        h_offset = -140
+        h_offset = -80
         period = 250
         amplitude = [10, 30, 20]
         offset = [0, 0, 0]
@@ -199,7 +199,7 @@ class Raider(object):
         self.home(-140, 10)
         self.move(16, 512+30)
 
-        h_offset = -120
+        h_offset = -80
         period = 300
         amplitude = [25, 25, 30, 10, 10]
         offset = [0, 0, 0, 0, 0]
@@ -238,7 +238,7 @@ class Raider(object):
 
         self.move(15, 512-30)
 
-        h_offset = -120
+        h_offset = -80
         period = 300
         amplitude = [25, 25, 30, 10, 10]
         offset = [0, 0, 0, 0, 0]
