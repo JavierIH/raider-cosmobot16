@@ -226,11 +226,11 @@ class Raider(object):
             self.move(14, 512+self.osc[1].output)
             self.move(2, 512+self.osc[2].output)
             self.move(17, 512-h_offset-self.osc[3].output)
-            self.move(19, 512+h_offset+self.osc[3].output)
-            self.move(21, 512+h_offset-18+self.osc[3].output)
+            self.move(19, 512+h_offset+10+self.osc[3].output)
+            self.move(21, 512+h_offset-16+self.osc[3].output)
             self.move(18, 512+h_offset+self.osc[4].output)
-            self.move(20, 512-h_offset-self.osc[4].output)
-            self.move(22, 512-h_offset+18-self.osc[4].output)
+            self.move(20, 512-h_offset-10-self.osc[4].output)
+            self.move(22, 512-h_offset+16-self.osc[4].output)
             time.sleep(0.01)
 
     def turnL(self, steps):
@@ -266,10 +266,10 @@ class Raider(object):
             self.move(2, 512+self.osc[2].output)
             self.move(17, 512-h_offset-self.osc[3].output)
             self.move(19, 512+h_offset+10+self.osc[3].output)
-            self.move(21, 512+h_offset-18+self.osc[3].output)
+            self.move(21, 512+h_offset-16+self.osc[3].output)
             self.move(18, 512+h_offset+self.osc[4].output)
             self.move(20, 512-h_offset-10-self.osc[4].output)
-            self.move(22, 512-h_offset+18-self.osc[4].output)
+            self.move(22, 512-h_offset+16-self.osc[4].output)
             time.sleep(0.01)
 
     def punchL(self):
