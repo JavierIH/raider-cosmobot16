@@ -464,14 +464,16 @@ class Raider(object):
     def lift(self):
 
         x = 5
-        y = 8
+        y = 4
         z = -45
         result_left = self.leftLegIK(x, y, z)
 
         x = 5
-        y = -8
+        y = -4
         z = -45
         result_right = self.rightLegIK(x, y, z)
+
+        lift_pitch = 20
 
         self.move(15, result_right[0])
         self.move(16, result_left[0])
@@ -484,24 +486,28 @@ class Raider(object):
         self.move(23, result_right[4])
         self.move(24, result_left[4])
 
-	self.move(3, 662)
-	self.move(4, 362)
+	self.move(3, 562)
+	self.move(4, 462)
 	self.move(6, 812)
 	self.move(8, 512)
 	self.move(10, 812)
+        time.sleep(5)
+        
+	self.move(10, 912)
 
-        time.sleep(8)
+        time.sleep(3)
 
         for i in range (0, 100):
-            total_time = 3.0
-            x = 5
-            y = 12
-            z = -45 - (90.0*i)/100
+            total_time = 2.5
+            progress = float(i)/100
+            x = 10
+            y = 4
+            z = -45 - (100.0*i)/100
             result_left = self.leftLegIK(x, y, z)
 
-            x = 5
-            y = -12
-            z = -45 - (90.0*i)/100
+            x = 10
+            y = -4
+            z = -45 - (100.0*i)/100
             result_right = self.rightLegIK(x, y, z)
 
             self.move(15, result_right[0])
@@ -510,8 +516,8 @@ class Raider(object):
             self.move(18, result_left[1])
             self.move(19, result_right[2])
             self.move(20, result_left[2])
-            self.move(21, result_right[3]-10)
-            self.move(22, result_left[3]+10)
+            self.move(21, result_right[3]-30+20*progress)
+            self.move(22, result_left[3]+30-20*progress)
             self.move(23, result_right[4])
             self.move(24, result_left[4])
             print result_left[3]
