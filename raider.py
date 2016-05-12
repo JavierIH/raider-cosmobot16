@@ -463,14 +463,14 @@ class Raider(object):
 
     def lift(self):
 
-        x = 0
-        y = 15
-        z = -135
+        x = 5
+        y = 8
+        z = -45
         result_left = self.leftLegIK(x, y, z)
 
-        x = 0
-        y = -15
-        z = -135
+        x = 5
+        y = -8
+        z = -45
         result_right = self.rightLegIK(x, y, z)
 
         self.move(15, result_right[0])
@@ -483,7 +483,40 @@ class Raider(object):
         self.move(22, result_left[3])
         self.move(23, result_right[4])
         self.move(24, result_left[4])
-        time.sleep(0.01)
+
+	self.move(3, 662)
+	self.move(4, 362)
+	self.move(6, 812)
+	self.move(8, 512)
+	self.move(10, 812)
+
+        time.sleep(8)
+
+        for i in range (0, 100):
+            total_time = 3.0
+            x = 5
+            y = 12
+            z = -45 - (90.0*i)/100
+            result_left = self.leftLegIK(x, y, z)
+
+            x = 5
+            y = -12
+            z = -45 - (90.0*i)/100
+            result_right = self.rightLegIK(x, y, z)
+
+            self.move(15, result_right[0])
+            self.move(16, result_left[0])
+            self.move(17, result_right[1])
+            self.move(18, result_left[1])
+            self.move(19, result_right[2])
+            self.move(20, result_left[2])
+            self.move(21, result_right[3]-10)
+            self.move(22, result_left[3]+10)
+            self.move(23, result_right[4])
+            self.move(24, result_left[4])
+            print result_left[3]
+            time.sleep(total_time/100)
+
 
     def degToUnits(self, angle):
         return (int)((angle * 1024.0 / 300) + 512)
