@@ -486,6 +486,7 @@ class Raider(object):
         self.move(22, result_left[3])
         self.move(23, result_right[4])
         self.move(24, result_left[4])
+	time.sleep(0.2)
 
         # Arms ready
         self.move(3, 562)
@@ -529,7 +530,10 @@ class Raider(object):
             self.move(24, result_left[4])
             time.sleep(total_time/100)
 
-        time.sleep(10)
+        time.sleep(5)
+        self.move(9, 412)
+        self.move(10, 612)
+        time.sleep(1)
 
     def degToUnits(self, angle):
         return (int)((angle * 1024.0 / 300) + 512)
