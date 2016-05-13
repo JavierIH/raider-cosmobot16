@@ -58,13 +58,13 @@ class Raider(object):
     def home(self, h=0, a=0):
         self.move(1, 512)
         self.move(2, 512)
-        # self.move(3, 512)
+        self.move(3, 512)
         self.move(4, 512)
-        # self.move(5, 262)
+        self.move(5, 262)
         self.move(6, 762)
-        # self.move(7, 462)
+        self.move(7, 462)
         self.move(8, 562)
-        # self.move(9, 62)
+        self.move(9, 62)
         self.move(10, 952)
         self.move(13, 512)
         self.move(14, 512)
@@ -475,6 +475,7 @@ class Raider(object):
 
         lift_pitch = 20
 
+        # Initial position
         self.move(15, result_right[0])
         self.move(16, result_left[0])
         self.move(17, result_right[1])
@@ -486,18 +487,24 @@ class Raider(object):
         self.move(23, result_right[4])
         self.move(24, result_left[4])
 
-	self.move(3, 562)
-	self.move(4, 462)
-	self.move(6, 812)
-	self.move(8, 512)
-	self.move(10, 812)
+        # Arms ready
+        self.move(3, 562)
+        self.move(4, 462)
+        self.move(5, 212)
+        self.move(6, 812)
+        self.move(7, 512)
+        self.move(8, 512)
+        self.move(9, 212)
+        self.move(10, 812)
         time.sleep(5)
-        
-	self.move(10, 912)
+
+        # Arms catch
+        self.move(9, 112)
+        self.move(10, 912)
 
         time.sleep(3)
 
-        for i in range (0, 100):
+        for i in range(0, 100):
             total_time = 2.5
             progress = float(i)/100
             x = 10
@@ -520,9 +527,9 @@ class Raider(object):
             self.move(22, result_left[3]+30-20*progress)
             self.move(23, result_right[4])
             self.move(24, result_left[4])
-            print result_left[3]
             time.sleep(total_time/100)
 
+        time.sleep(10)
 
     def degToUnits(self, angle):
         return (int)((angle * 1024.0 / 300) + 512)
@@ -573,4 +580,4 @@ if __name__ == "__main__":
 
     trims=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-5,5,0,0,-5,0,-6,0,0,0]
     robot = Raider(trims)
-    robot.lift()
+    robot.home(-80, 30)

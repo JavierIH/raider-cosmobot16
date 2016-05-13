@@ -23,7 +23,7 @@ while True:
     # axisRY = joystick.get_axis(3)
     back = joystick.get_button(8)
     start = joystick.get_button(9)
-    # buttonY = joystick.get_button(0)
+    buttonY = joystick.get_button(0)
     buttonB = joystick.get_button(1)
     buttonA = joystick.get_button(2)
     buttonX = joystick.get_button(3)
@@ -36,6 +36,10 @@ while True:
     if buttonX == 1:
         print 'ue'
         robot.punchL()
+
+    if buttonY == 1:
+        print 'lift'
+        robot.lift()
 
     elif buttonA == 1:
         print 'front punch'
